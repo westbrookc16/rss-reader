@@ -6,7 +6,7 @@ backgroundRouter.get("/", async (req, res) => {
   const { Pool } = require("pg");
   try {
     const pool = new Pool();
-    pool.connect();
+    await pool.connect();
     const feeds = await pool.query(
       "select id, url from feeds where url is not null"
     );
@@ -43,7 +43,7 @@ backgroundRouter.get("/", async (req, res) => {
     } //ending for loop for feeds
     pool.end();
     console.log("success");
-    res.send(`{"success":"true"}`);
+    res.json({ success: true });
   } catch (e) {
     console.log(e.stack);
     res.send(e);
