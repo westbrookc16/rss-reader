@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
       );
       res.json(insertRes.rows);
     } else {
-      res.send(q.rows);
+      //res.send(q.rows);
     }
 
     pool.end();

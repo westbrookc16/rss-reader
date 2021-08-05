@@ -61,7 +61,8 @@ router.get("/:userID", async (req, res) => {
     res.send(dbRes.rows);
     await pool.end();
   } catch (e) {
-    console.log(e);
+    console.log("feeds error.");
+    //console.log(e);
   }
 });
 module.exports = router;

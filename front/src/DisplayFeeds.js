@@ -6,11 +6,12 @@ import { UserContext } from "./UserContext";
 const DisplayFeeds = () => {
   const [titles, setTitles] = useState([]);
   const { user } = useContext(UserContext);
-  //eslint-disable-next-line
+
   const [reload, setReload] = useState(0);
   useEffect(() => {
     async function fetch() {
       try {
+        if (!user.dbID) return;
         const res = await callApi(`/api/feeds/${user.dbID}`, "get");
         setTitles(res);
       } catch (e) {
@@ -18,12 +19,12 @@ const DisplayFeeds = () => {
       }
     }
     fetch();
-  }, [user.dbID]);
+  }, [user]);
   const updateStories = async (e) => {
     await callApi("/api/backgroundFetch", "get");
     alert("successs.");
-    setReload(1);
-    setReload(0);
+    if (reload === 0) setReload(1);
+    else setReload(0);
   };
   return (
     <div>

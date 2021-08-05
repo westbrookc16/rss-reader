@@ -4,6 +4,7 @@ const Items = ({ id, reload }) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
     async function fetchData() {
+      if (id === null) return;
       console.log(`fetching data`);
       const res = await callApi(`/api/items/${id}`, `get`);
       setItems(res);
