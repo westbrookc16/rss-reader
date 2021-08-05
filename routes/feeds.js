@@ -1,7 +1,7 @@
 const express = require("express");
 const Parser = require("rss-parser");
 const router = express.Router();
-router.post("/", async (req, res) => {
+router.post("/:userID", async (req, res) => {
   const feed = req.body;
   const { userID } = req.params;
   //get info from feed
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
         [feedID, userID]
       );
     }
-    res.json({ feedID });
+    res.json({ feed });
     await pool.end();
   } catch (e) {
     console.log(e.stack);
