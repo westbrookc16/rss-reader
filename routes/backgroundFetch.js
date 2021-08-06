@@ -5,7 +5,12 @@ backgroundRouter.get("/", async (req, res) => {
   const parser = new Parser();
   const { Pool } = require("pg");
   try {
-    const pool = new Pool();
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
     await pool.connect();
     const feeds = await pool.query(
       "select id, url from feeds where url is not null"

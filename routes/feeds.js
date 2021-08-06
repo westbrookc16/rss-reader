@@ -11,7 +11,12 @@ router.post("/:userID", async (req, res) => {
     feed["name"] = rssRes.title;
     feed["description"] = rssRes.description;
     const { Pool } = require("pg");
-    const pool = new Pool();
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
 
     await pool.connect();
     //see if feed exists
@@ -50,7 +55,12 @@ router.post("/:userID", async (req, res) => {
 });
 router.get("/:userID", async (req, res) => {
   const { Pool } = require("pg");
-  const pool = new Pool();
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
   try {
     await pool.connect();
     const { userID } = req.params;

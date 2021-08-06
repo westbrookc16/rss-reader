@@ -3,7 +3,12 @@ const { Pool } = require("pg");
 const router = express.Router();
 router.post("/", async (req, res) => {
   try {
-    const pool = new Pool();
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
     await pool.connect();
     const { email, sub } = req.body;
     const q = await pool.query(
