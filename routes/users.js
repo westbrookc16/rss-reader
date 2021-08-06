@@ -25,8 +25,8 @@ router.post("/", async (req, res) => {
       //res.send(q.rows);
     }
 
-    pool.end();
     res.json(q.rows);
+    await pool.end();
   } catch (e) {
     console.log(e.stack);
   }

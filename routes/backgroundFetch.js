@@ -46,9 +46,10 @@ backgroundRouter.get("/", async (req, res) => {
         [row["id"]]
       );
     } //ending for loop for feeds
-    pool.end();
+
     console.log("success");
     res.json({ success: true });
+    await pool.end();
   } catch (e) {
     console.log(e.stack);
     res.send(e);
