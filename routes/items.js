@@ -5,7 +5,7 @@ router.get("/:feedID", async (req, res) => {
   try {
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === "production" ? true : false,
+      ssl: true,
     });
     client.connect();
     const dbRes = await client.query(
