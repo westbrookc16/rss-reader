@@ -1,5 +1,6 @@
+require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
+require("./scripts/updateItems");
 
 const app = express();
 //routes
@@ -8,7 +9,7 @@ const users = require("./routes/users");
 const rssRoute = require("./routes/rss");
 const BackgroundFetch = require("./routes/backgroundFetch");
 const items = require("./routes/items");
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("/api/feeds", feeds);
 app.use("/api/rss", rssRoute);
@@ -22,8 +23,6 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
   });
-} else {
-  require("dotenv").config();
 }
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
