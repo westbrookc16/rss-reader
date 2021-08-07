@@ -5,7 +5,7 @@ router.post("/", async (req, res) => {
   try {
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: true,
+      ssl: process.env.NODE_ENV === "production" ? true : false,
     });
     await client.connect();
     const { email, sub } = req.body;
