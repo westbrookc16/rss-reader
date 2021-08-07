@@ -14,7 +14,10 @@ router.post("/:userID", async (req, res) => {
 
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === "production" ? true : false,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
     });
 
     await client.connect();
@@ -56,7 +59,10 @@ router.post("/:userID", async (req, res) => {
 router.get("/:userID", async (req, res) => {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === "production" ? true : false,
+    ssl:
+      process.env.NODE_ENV === "production"
+        ? { rejectUnauthorized: false }
+        : false,
   });
   try {
     await client.connect();
