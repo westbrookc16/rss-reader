@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { callApi } from "./utils/fetch";
-const Items = ({ id, reload }) => {
+const Items = ({ id }) => {
   const [items, setItems] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -10,7 +10,7 @@ const Items = ({ id, reload }) => {
       setItems(res);
     }
     fetchData();
-  }, [id, reload]);
+  }, [id]);
   const displayItems = items.map((item) => {
     const { id, title, url, description } = item;
     return (
