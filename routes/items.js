@@ -1,21 +1,19 @@
 const express = require("express");
 const router = express.Router();
 router.get("/:feedID", async (req, res) => {
-  const { Pool } = require("pg");
+  const { Client } = require("pg");
   try {
-    const pool = new Pool({
+    const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl: process.env.NODE_ENV === "production" ? true : false,
     });
-    pool.connect();
-    const dbRes = await pool.query(
+    client.connect();
+    const dbRes = await client.query(
       "select id,title, url,description from items where feedID=$1 order by dateAdded desc",
       [req.params["feedID"]]
     );
     res.send(dbRes.rows);
-    await pool.end();
+    await client.end();
   } catch (e) {
     console.log(e);
   }
