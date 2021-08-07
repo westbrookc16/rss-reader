@@ -6,8 +6,22 @@ import { UserContext } from "./UserContext";
 const DisplayFeeds = () => {
   const [titles, setTitles] = useState([]);
   const { user } = useContext(UserContext);
+  //get items
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (!user || !user.dbID) return;
+        const res = await callApi(`/api/items/${user.dbID}`, `get`);
+        setItems(res);
+        console.log(`setting items herer.`);
+      } catch (e) {
+        console.log(e.stack);
+      }
+    }
+    fetchData();
+  }, [user]);
 
-  //const [reload, setReload] = useState(0);
   useEffect(() => {
     async function fetch() {
       try {
@@ -30,7 +44,7 @@ const DisplayFeeds = () => {
     <div>
       <h1>View Stories</h1>
 
-      <Feeds titles={titles} />
+      <Feeds titles={titles} items={items} />
     </div>
   );
 };

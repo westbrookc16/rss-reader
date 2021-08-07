@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { callApi } from "./utils/fetch";
-const Items = ({ id }) => {
-  const [items, setItems] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      if (id === null) return;
-      console.log(`fetching data`);
-      const res = await callApi(`/api/items/${id}`, `get`);
-      setItems(res);
-    }
-    fetchData();
-  }, [id]);
+import React from "react";
+
+const Items = ({ items }) => {
+  console.log(`items=${items.length}`);
   const displayItems = items.map((item) => {
     const { id, title, url, description } = item;
     return (

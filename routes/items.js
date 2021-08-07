@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-router.get("/:feedID", async (req, res) => {
+router.get("/:userID", async (req, res) => {
   const { Client } = require("pg");
   try {
     const client = new Client({
@@ -12,8 +12,8 @@ router.get("/:feedID", async (req, res) => {
     });
     client.connect();
     const dbRes = await client.query(
-      "select id,title, url,description from items where feedID=$1 order by dateAdded desc",
-      [req.params["feedID"]]
+      "select items.feedID, items.id,items.title, items.url,items.description from items inner join feeds on feeds.id=items.feedid inner join subscriptions on subscriptions.feedID=feeds.id where subscriptions.userid=$1 order by items.feedID, dateAdded desc",
+      [req.params["userID"]]
     );
     res.send(dbRes.rows);
     await client.end();
