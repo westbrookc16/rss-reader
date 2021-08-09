@@ -49,6 +49,21 @@ router.post("/:userID", async (req, res) => {
         [feedID, userID]
       );
     }
+    //see if there are any items, if not fill the items table
+    const itemsSelect = await client.query(
+      "select id from items where feedid=$1",
+      [feedID]
+    );
+    if (itemsSelect.rowCount === 0) {
+      for (const item of rssRes.items) {
+        const { title, link, content } = item;
+
+        await client.query(
+          "insert into items (title,description,url,feedid) values ($1,$2,$3,$4)",
+          [title, content, link, feedID]
+        );
+      }
+    }
     res.json({ feed });
     await client.end();
   } catch (e) {

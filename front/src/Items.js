@@ -11,7 +11,7 @@ const Items = ({ items }) => {
             {title}
           </a>
         </h3>
-        {description} <br />
+        <div dangerouslySetInnerHTML={{ __html: description }}></div> <br />
       </React.Fragment>
     );
   });
