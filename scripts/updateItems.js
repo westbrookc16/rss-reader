@@ -43,7 +43,7 @@ module.exports = cron.schedule("*/30 * * * *", async () => {
       //delete old items here.
       console.log(`deleteedID=${row["id"]}`);
       await client.query(
-        "delete from items where title in (select title from items where feedid=$1 and isNew=false) and isNew=true",
+        "delete from items where url in (select distinct url from items where feedid=$1 and isNew=false) and isNew=true",
         [row["id"]]
       );
     } //ending for loop for feeds
