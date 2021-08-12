@@ -19,8 +19,16 @@ app.use("/api/users", users);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("front/build"));
 
-  const path = require("path");
-  app.get("*", (req, res) => {
+  //const path = require("path");
+  app.use((req, res, next) => {
+    if (!req.secure && req.headers["x-forwarded-proto"] !== "https") {
+      res.redirect("https://" + req.headers.host + req.url);
+    } else {
+      next();
+    }
+  });
+
+  /*app.get("*", (req, res) => {
     if (!req.secure) {
       res.redirect("https://" + req.headers.host + req.url);
       return;
@@ -28,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
     console.log(`protocol=${req.protocol}`);
 
     res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
-  });
+  });*/
 }
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
