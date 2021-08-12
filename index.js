@@ -5,8 +5,6 @@ require("./scripts/updateItems");
 const app = express();
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("front/build"));
-
   //const path = require("path");
   app.use((req, res, next) => {
     if (!req.secure && req.headers["x-forwarded-proto"] !== "https") {
@@ -15,6 +13,8 @@ if (process.env.NODE_ENV === "production") {
       next();
     }
   });
+
+  app.use(express.static("front/build"));
 
   /*app.get("*", (req, res) => {
     if (!req.secure) {
