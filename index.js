@@ -21,8 +21,9 @@ if (process.env.NODE_ENV === "production") {
 
   const path = require("path");
   app.get("*", (req, res) => {
-    res.redirect("https://" + req.headers.host + req.url);
-    res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
+    if (req.protocol === "http")
+      res.redirect("https://" + req.headers.host + req.url);
+    else res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
   });
 }
 const PORT = process.env.PORT || 5000;
