@@ -5,7 +5,6 @@ require("./scripts/updateItems");
 const app = express();
 
 if (process.env.NODE_ENV === "production") {
-  //const path = require("path");
   app.use((req, res, next) => {
     if (!req.secure && req.headers["x-forwarded-proto"] !== "https") {
       res.redirect("https://" + req.headers.host + req.url);
@@ -15,16 +14,6 @@ if (process.env.NODE_ENV === "production") {
   });
 
   app.use(express.static("front/build"));
-
-  /*app.get("*", (req, res) => {
-    if (!req.secure) {
-      res.redirect("https://" + req.headers.host + req.url);
-      return;
-    }
-    console.log(`protocol=${req.protocol}`);
-
-    res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
-  });*/
 }
 
 //routes
