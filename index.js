@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === "production") {
 
   const path = require("path");
   app.get("*", (req, res) => {
+    console.log(`protocol=${req.protocol}`);
     if (req.protocol === "http")
       res.redirect("https://" + req.headers.host + req.url);
     else res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
