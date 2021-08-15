@@ -3,6 +3,9 @@ import { callApi } from "./utils/fetch";
 import { LiveMessage } from "react-aria-live";
 import { UserContext } from "./UserContext";
 const AddFeed = () => {
+  useEffect(() => {
+    window.title = `add Feed`;
+  }, []);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
