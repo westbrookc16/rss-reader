@@ -5,7 +5,7 @@ import Feeds from "./Feeds";
 import { UserContext } from "./UserContext";
 const DisplayFeeds = () => {
   useEffect(() => {
-    window.title = `View Stories`;
+    document.title = `View  Stories`;
   }, []);
   const [titles, setTitles] = useState([]);
   const { user } = useContext(UserContext);

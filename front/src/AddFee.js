@@ -4,7 +4,7 @@ import { LiveMessage } from "react-aria-live";
 import { UserContext } from "./UserContext";
 const AddFeed = () => {
   useEffect(() => {
-    window.title = `add Feed`;
+    document.title = `add Feed`;
   }, []);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
