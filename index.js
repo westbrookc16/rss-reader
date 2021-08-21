@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 require("./scripts/updateItems");
+require("./scripts/updatePodcastItems");
 
 const app = express();
 
@@ -22,9 +23,11 @@ const users = require("./routes/users");
 const rssRoute = require("./routes/rss");
 const BackgroundFetch = require("./routes/backgroundFetch");
 const items = require("./routes/items");
+const podcasts = require("./routes/podcastSearch");
 app.use(express.json());
 
 app.use("/api/feeds", feeds);
+app.use("/api/podcasts", podcasts);
 app.use("/api/rss", rssRoute);
 app.use("/api/backgroundFetch", BackgroundFetch);
 app.use("/api/items", items);

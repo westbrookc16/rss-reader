@@ -1,17 +1,27 @@
 const { Client } = require("pg");
+
 const express = require("express");
-const Parser = require("rss-parser");
+const RssParser = require("rss-parser");
+const PodcastParser = require("podcast-feed-parser");
+
 const router = express.Router();
 router.post("/:userID", async (req, res) => {
   const feed = req.body;
   const { userID } = req.params;
   //get info from feed
-  const parser = new Parser();
+  const rssParser = new RssParser();
   try {
-    const rssRes = await parser.parseURL(feed.url);
-    feed["name"] = rssRes.title;
-    feed["description"] = rssRes.description;
+    if (feed.isAudio === false) {
+      const rssRes = await parser.parseURL(feed.url);
+      feed.name = rssRes.title;
+      feed.description = rssRes.description;
+    } else {
+      //get podcast feed
+      const podcastRes = await PodcastParser.getPodcastFromURL(feed.url);
 
+      feed.description = podcastRes.meta.description;
+      feed.name = podcastRes.meta.title;
+    }
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
       ssl:
@@ -30,13 +40,13 @@ router.post("/:userID", async (req, res) => {
     if (selectQuery.rowCount == 0) {
       //insert feed
       const queryText =
-        "insert into feeds (name,url,description) values ($1,$2,$3) returning *";
-      const { name, url, description } = feed;
-      const values = [name, url, description];
+        "insert into feeds (name,url,description,isAudio) values ($1,$2,$3,$4) returning *";
+      const { name, url, description, isAudio } = feed;
+      const values = [name, url, description, feed.isAudio];
       const insertRes = await client.query(queryText, values);
       feedID = insertRes.rows[0].id;
     } else {
-      feedID = selectQuery.rows[0]["id"];
+      feedID = selectQuery.rows[0].id;
     }
     //select from subscriptions to make sure there are no duplicates
     const selectSubscription = await client.query(
@@ -55,13 +65,25 @@ router.post("/:userID", async (req, res) => {
       [feedID]
     );
     if (itemsSelect.rowCount === 0) {
-      for (const item of rssRes.items) {
-        const { title, link, content } = item;
+      if (feed.isAudio === false) {
+        for (const item of rssRes.items) {
+          const { title, link, content } = item;
 
-        await client.query(
-          "insert into items (title,description,url,feedid) values ($1,$2,$3,$4)",
-          [title, content, link, feedID]
-        );
+          await client.query(
+            "insert into items (title,description,url,feedid) values ($1,$2,$3,$4)",
+            [title, content, link, feedID]
+          );
+        }
+      } else {
+        //here is a podcast
+        const podcastRes = await PodcastParser.getPodcastFromURL(feed.url);
+        for (var i = 0; i < 20; i++) {
+          var item = podcastRes.episodes[i];
+          await client.query(
+            "insert into items (title,description,url,feedid) values ($1,$2,$3,$4)",
+            [item.title, item.description, item.enclosure.url, feedID]
+          );
+        }
       }
     }
     res.json({ feed });
@@ -83,7 +105,7 @@ router.get("/:userID", async (req, res) => {
     await client.connect();
     const { userID } = req.params;
     const dbRes = await client.query(
-      "select f.id,name from feeds f inner join subscriptions s on s.feedID=f.id and s.userID=$1 where active=true order by name asc",
+      "select f.isAudio, f.id,name from feeds f inner join subscriptions s on s.feedID=f.id and s.userID=$1 where active=true order by name asc",
       [userID]
     );
     res.send(dbRes.rows);

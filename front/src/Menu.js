@@ -14,12 +14,18 @@ const Menu = () => {
           </li>
           {isAuthenticated && (
             <li>
-              <NavLink to="/feeds">View Feeds</NavLink>
+              <NavLink to="/feeds">View Feeds/podcasts</NavLink>
             </li>
           )}
           {isAuthenticated && (
             <li>
               <NavLink to="/addfeed">Add Feed</NavLink>
+            </li>
+          )}
+
+          {isAuthenticated && (
+            <li>
+              <NavLink to="/addpodcast">Add Podcast</NavLink>
             </li>
           )}
           {!isAuthenticated && (

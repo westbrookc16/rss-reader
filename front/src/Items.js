@@ -1,7 +1,7 @@
 import React from "react";
-
-const Items = ({ items }) => {
-  console.log(`items=${items.length}`);
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+const Items = ({ items, isaudio }) => {
   const displayItems = items.map((item) => {
     const { id, title, url, description } = item;
     return (
@@ -12,6 +12,7 @@ const Items = ({ items }) => {
           </a>
         </h3>
         <div dangerouslySetInnerHTML={{ __html: description }}></div> <br />
+        {isaudio && <AudioPlayer src={url} />}
       </React.Fragment>
     );
   });

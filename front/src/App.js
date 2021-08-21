@@ -7,6 +7,7 @@ import Profile from "./Profile";
 import Home from "./Home";
 import DisplayFeeds from "./DisplayFeeds";
 import "./App.css";
+import AddPodcast from "./AddPodcast";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
               </Route>
               <Route path="/addFeed">
                 <AddFeed />
+              </Route>
+              <Route path="/addPodcast">
+                <AddPodcast />
               </Route>
               <Route path="/">
                 <Home />
