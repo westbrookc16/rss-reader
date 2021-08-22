@@ -66,7 +66,8 @@ router.post("/:userID", async (req, res) => {
     );
     if (itemsSelect.rowCount === 0) {
       if (feed.isAudio === false) {
-        for (const item of rssRes.items) {
+        for (let i = rssRes.items.length - 1; i >= 0; i--) {
+          const item = rssRes.items[i];
           const { title, link, content } = item;
 
           await client.query(
@@ -77,7 +78,7 @@ router.post("/:userID", async (req, res) => {
       } else {
         //here is a podcast
         const podcastRes = await PodcastParser.getPodcastFromURL(feed.url);
-        for (var i = 0; i < 20; i++) {
+        for (var i = 19; i >= 0; i--) {
           var item = podcastRes.episodes[i];
           await client.query(
             "insert into items (title,description,url,feedid) values ($1,$2,$3,$4)",

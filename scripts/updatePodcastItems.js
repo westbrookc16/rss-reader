@@ -20,7 +20,7 @@ module.exports = cron.schedule("*/5 * * * *", async () => {
       //get items and update or insert them
 
       const rssFeed = await podcastParser.getPodcastFromURL(row.url);
-      for (var i = 0; i < 20; i++) {
+      for (var i = 19; i >= 0; i--) {
         const item = rssFeed.episodes[i];
         const { title, description } = item;
         const link = item.enclosure.url;
