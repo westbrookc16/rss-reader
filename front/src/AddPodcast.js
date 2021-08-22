@@ -8,9 +8,8 @@ const AddPodcast = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     const data = await callApi(
-      `https://itunes.apple.com/search?term=${encodeURIComponent(
-        search
-      )}&media=podcast`
+      `/api/podcasts/search?q=${encodeURIComponent(search)}`,
+      `get`
     );
     setResults(data.results);
   };

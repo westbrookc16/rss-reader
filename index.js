@@ -31,7 +31,7 @@ const rssRoute = require("./routes/rss");
 const BackgroundFetch = require("./routes/backgroundFetch");
 const items = require("./routes/items");
 const podcasts = require("./routes/podcastSearch");
-const { all } = require("./routes/feeds");
+
 app.use(express.json());
 
 app.use("/api/feeds", feeds);
