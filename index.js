@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+//next two lines are for scheduling podcasts and feeds
 require("./scripts/updateItems");
 require("./scripts/updatePodcastItems");
 
@@ -13,7 +14,13 @@ if (process.env.NODE_ENV === "production") {
       next();
     }
   });
-
+  const allowCrossDomain = function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+  };
+  app.use(allowCrossDomain);
   app.use(express.static("front/build"));
 }
 
@@ -24,6 +31,7 @@ const rssRoute = require("./routes/rss");
 const BackgroundFetch = require("./routes/backgroundFetch");
 const items = require("./routes/items");
 const podcasts = require("./routes/podcastSearch");
+const { all } = require("./routes/feeds");
 app.use(express.json());
 
 app.use("/api/feeds", feeds);
