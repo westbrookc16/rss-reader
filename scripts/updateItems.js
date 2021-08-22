@@ -21,7 +21,7 @@ module.exports = cron.schedule("*/30 * * * *", async () => {
       //get items and update or insert them
 
       const rssFeed = await parser.parseURL(row["url"]);
-      for (let i = rssFeed.items.length; i >= 0; i--) {
+      for (let i = rssFeed.items.length - 1; i >= 0; i--) {
         const item = rssFeed.items[i];
         const { title, link, content } = item;
         const updateRows = await client.query(
