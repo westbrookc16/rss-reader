@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const podcastParser = require("podcast-feed-parser");
 const { Client } = require("pg");
 
-module.exports = cron.schedule("*/5 * * * *", async () => {
+module.exports = cron.schedule("*/30 * * * *", async () => {
   try {
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
