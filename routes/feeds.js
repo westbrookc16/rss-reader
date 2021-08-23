@@ -106,14 +106,13 @@ router.get("/:userID", async (req, res) => {
     await client.connect();
     const { userID } = req.params;
     const dbRes = await client.query(
-      "select f.isAudio, f.id,name from feeds f inner join subscriptions s on s.feedID=f.id and s.userID=$1 where active=true order by name asc",
+      "select f.isAudio, f.id,name from feeds f inner join subscriptions s on s.feedID=f.id and s.userID=$1 inner join (select feedid, max(dateadded) as newestEntered from items group by feedid) as newdates on newdates.feedid=f.id where active=true order by newestEntered desc",
       [userID]
     );
     res.send(dbRes.rows);
     await client.end();
   } catch (e) {
-    console.log("feeds error.");
-    //console.log(e);
+    console.log(e.stack);
   }
 });
 module.exports = router;
