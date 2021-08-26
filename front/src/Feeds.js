@@ -1,22 +1,11 @@
 import React from "react";
-import Items from "./Items";
+import Feed from "./Feed";
 
-const Feeds = ({ titles, items }) => {
+const Feeds = ({ titles }) => {
+  //const [items, setITems] = useState([]);
   const feeds = titles.map((item) => {
     const { name, id, isaudio } = item;
-    //filter items
-    console.log(`${name}=${isaudio}`);
-    let filteredItems = items.filter((i) => {
-      //console.log(`${i.feedid}=${id}`);
-      return i.feedid === id;
-    });
-
-    return (
-      <React.Fragment key={id}>
-        <h2>{name}</h2>
-        <Items id={id} key={id} items={filteredItems} isaudio={isaudio} />
-      </React.Fragment>
-    );
+    return <Feed key={id} name={name} id={id} isaudio={isaudio} />;
   });
   return <div>{feeds}</div>;
 };

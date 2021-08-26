@@ -109,7 +109,7 @@ router.get("/:userID", async (req, res) => {
       "select f.isAudio, f.id,name from feeds f inner join subscriptions s on s.feedID=f.id and s.userID=$1 inner join (select feedid, max(dateadded) as newestEntered from items group by feedid) as newdates on newdates.feedid=f.id where active=true order by newestEntered desc",
       [userID]
     );
-    res.send(dbRes.rows);
+    res.json(dbRes.rows);
     await client.end();
   } catch (e) {
     console.log(e.stack);
