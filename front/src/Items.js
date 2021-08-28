@@ -1,5 +1,5 @@
 import React from "react";
-import ReactAudioPlayer from "react-audio-player";
+
 const Items = ({ items, isaudio }) => {
   const displayItems = items.map((item) => {
     const { id, title, url, description } = item;
@@ -11,7 +11,6 @@ const Items = ({ items, isaudio }) => {
           </a>
         </h3>
         <div dangerouslySetInnerHTML={{ __html: description }}></div> <br />
-        {isaudio && <ReactAudioPlayer src={url} loop={false} controls />}
       </React.Fragment>
     );
   });
