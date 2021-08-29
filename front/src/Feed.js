@@ -15,11 +15,13 @@ const Feed = ({ name, id, isaudio }) => {
     }
     fetchData();
   }, [id]);
-
+  const [hide, setHide] = React.useState(true);
+  const hideToggle = () => setHide((h) => (h ? false : true));
   return (
     <>
       <h2>{name}</h2>
-      <Items items={items} isaudio={isaudio} />
+      <button onClick={hideToggle}>{hide ? `Hide` : `Show`}</button>
+      {hide && <Items items={items} isaudio={isaudio} />}
     </>
   );
 };
