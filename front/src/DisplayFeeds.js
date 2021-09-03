@@ -24,17 +24,15 @@ const DisplayFeeds = () => {
     }
     fetch();
   }, [user]);
-  /*const updateStories = async (e) => {
-    await callApi("/api/backgroundFetch", "get");
-    alert("successs.");
-    if (reload === 0) setReload(1);
-    else setReload(0);
-  };*/
+  const deleteFeed = async (id) => {
+    await callApi(`/api/feeds/${id}/${user.dbID}`, `delete`);
+    setTitles((feeds) => feeds.filter((f) => f.id !== id));
+  };
   return (
     <div>
       <h1>View Stories</h1>
 
-      <Feeds titles={titles} />
+      <Feeds titles={titles} onDelete={deleteFeed} />
     </div>
   );
 };

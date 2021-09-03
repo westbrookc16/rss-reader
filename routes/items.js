@@ -12,8 +12,12 @@ router.get("/:feedID", async (req, res) => {
     });
     client.connect();
     const dbRes = await client.query(
-      "select items.feedID, items.id,items.title, items.url,items.description from items where items.feedid=$1 order by dateAdded desc",
+      "select items.feedID, items.id,items.title, items.url,items.description from items left outer join unreadItems on unreaditems.itemid=items.id where items.feedid=$1 and (unreadItems.id is null or unreadItems.unread=true) order by dateAdded desc",
       [req.params["feedID"]]
+    );
+    const q = await client.query(
+      `insert into unReadItems (itemID) select items.id from items left outer join unreadItems on unreadITems.itemid=items.id where feedid=$1 and unreadItems.id is null`,
+      [req.params.feedID]
     );
     res.send(dbRes.rows);
 

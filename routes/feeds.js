@@ -115,4 +115,34 @@ router.get("/:userID", async (req, res) => {
     console.log(e.stack);
   }
 });
+
+router.delete("/:feedID/:dbID", async (req, res) => {
+  try {
+    const { feedID, dbID } = req.params;
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
+    });
+    await client.connect();
+    //delete item from feeds subscription for user
+    await client.query(
+      `delete from subscriptions where feedid=$1 and userid=$2`,
+      [feedID, dbID]
+    );
+    //if there are no other subscriptions remove feed
+    const subs = await client.query(
+      `select * from subscriptions where feedid=$1`,
+      [feedID]
+    );
+    if (subs.rows.length === 0) {
+      await client.query(`delete from feeds where id=$1`, [feedID]);
+    }
+    res.json({});
+  } catch (e) {
+    console.log(e.stack);
+  }
+});
 module.exports = router;
