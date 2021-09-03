@@ -23,7 +23,7 @@ const Feed = ({ name, id, isaudio, onDelete }) => {
   }, [id]);
   const [hide, setHide] = React.useState(true);
   const hideToggle = () => setHide((h) => (h ? false : true));
-
+  if (items.length === 0) return;
   return (
     <>
       <h2>{name}</h2>
