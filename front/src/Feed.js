@@ -3,9 +3,10 @@ import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 import Items from "./Items";
 import { callApi } from "./utils/fetch";
-
+import { UserContext } from "./UserContext";
 const Feed = ({ name, id, isaudio, onDelete }) => {
   const [items, setItems] = React.useState([]);
+  const user = React.useContext(UserContext);
   const [showModal, setShowModal] = React.useState(false);
   const close = () => {
     setShowModal(false);
@@ -13,21 +14,23 @@ const Feed = ({ name, id, isaudio, onDelete }) => {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const data = await callApi(`/api/items/${id}`);
+        const data = await callApi(`/api/items/${id}/${user.dbID}`);
         setItems(data);
       } catch (e) {
         console.log(e.stack);
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, user.dbID]);
   const [hide, setHide] = React.useState(true);
   const hideToggle = () => setHide((h) => (h ? false : true));
   if (items.length === 0) return null;
   return (
     <>
       <h2>{name}</h2>
-      <button onClick={hideToggle}>{hide ? `Hide` : `Show`}</button>
+      <button onC zlick={hideToggle}>
+        {hide ? `Hide` : `Show`}
+      </button>
 
       <button
         onClick={(e) => {

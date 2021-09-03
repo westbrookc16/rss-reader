@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-router.get("/:feedID", async (req, res) => {
+router.get("/:feedID/:userID", async (req, res) => {
   const { Client } = require("pg");
   try {
     const client = new Client({
@@ -12,12 +12,12 @@ router.get("/:feedID", async (req, res) => {
     });
     client.connect();
     const dbRes = await client.query(
-      "select items.feedID, items.id,items.title, items.url,items.description from items left outer join unreadItems on unreaditems.itemid=items.id where items.feedid=$1 and (unreadItems.id is null or unreadItems.unread=true) order by dateAdded desc",
-      [req.params["feedID"]]
+      "select items.feedID, items.id,items.title, items.url,items.description from items left outer join unreadItems on unreaditems.itemid=items.id and unreaditems.useri=$2 where items.feedid=$1 and (unreadItems.id is null or unreadItems.unread=true) order by dateAdded desc",
+      [req.params["feedID"], req.params["userID"]]
     );
     const q = await client.query(
-      `insert into unReadItems (itemID) select items.id from items left outer join unreadItems on unreadITems.itemid=items.id where feedid=$1 and unreadItems.id is null`,
-      [req.params.feedID]
+      `insert into unReadItems (itemID,userID) select items.id,$2 from items left outer join unreadItems on unreadITems.itemid=items.id where feedid=$1 and unreadItems.id is null`,
+      [req.params.feedID, req.params.userID]
     );
     res.send(dbRes.rows);
 
