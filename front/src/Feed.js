@@ -14,6 +14,7 @@ const Feed = ({ name, id, isaudio, onDelete }) => {
   React.useEffect(() => {
     async function fetchData() {
       try {
+        if (!user.dbID) return;
         const data = await callApi(`/api/items/${id}/${user.dbID}`);
         setItems(data);
       } catch (e) {
@@ -28,9 +29,7 @@ const Feed = ({ name, id, isaudio, onDelete }) => {
   return (
     <>
       <h2>{name}</h2>
-      <button onC zlick={hideToggle}>
-        {hide ? `Hide` : `Show`}
-      </button>
+      <button onClick={hideToggle}>{hide ? `Hide` : `Show`}</button>
 
       <button
         onClick={(e) => {
