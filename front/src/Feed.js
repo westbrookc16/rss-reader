@@ -6,7 +6,7 @@ import { callApi } from "./utils/fetch";
 import { UserContext } from "./UserContext";
 const Feed = ({ name, id, isaudio, onDelete }) => {
   const [items, setItems] = React.useState([]);
-  const user = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const [showModal, setShowModal] = React.useState(false);
   const close = () => {
     setShowModal(false);
@@ -14,15 +14,19 @@ const Feed = ({ name, id, isaudio, onDelete }) => {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        if (!user.dbID) return;
-        const data = await callApi(`/api/items/${id}/${user.dbID}`);
+        console.dir(user);
+        if (!user["dbID"]) {
+          return;
+        }
+        console.log(`good`);
+        const data = await callApi(`/api/items/${id}/${user["dbID"]}`);
         setItems(data);
       } catch (e) {
         console.log(e.stack);
       }
     }
     fetchData();
-  }, [id, user.dbID]);
+  }, [id, user]);
   const [hide, setHide] = React.useState(true);
   const hideToggle = () => setHide((h) => (h ? false : true));
   if (items.length === 0) return null;
