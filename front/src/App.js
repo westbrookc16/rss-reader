@@ -1,7 +1,8 @@
 import logo from "./logo.svg";
 import Menu from "./Menu";
 import { UserData } from "./UserContext";
-import Callback from "./Callback";
+import AllStories from "./AllStories";
+
 import AddFeed from "./AddFee";
 import Profile from "./Profile";
 import Home from "./Home";
@@ -22,8 +23,8 @@ function App() {
           </nav>
           <main>
             <Switch>
-              <Route path="/callback">
-                <Callback />
+              <Route path="/all/:id">
+                <AllStories />
               </Route>
               <Route path="/feeds">
                 <DisplayFeeds />

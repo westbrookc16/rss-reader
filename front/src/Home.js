@@ -1,11 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { callApi } from "./utils/fetch";
+import { NavLink } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const Home = () => {
+  const { user } = useContext(UserContext);
   useEffect(() => {
     document.title = `Home`;
   }, []);
+  const [feeds, setFeeds] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const feeds = await callApi(`/api/feeds/${user.dbID}`);
+      setFeeds(feeds);
+    }
+    fetchData();
+  }, [user.dbID]);
+  const feedsMap = feeds.map((item) => {
+    const { id, name } = item;
+    return (
+      <li key={id}>
+        <NavLink to={`/all/${id}`}>{name}</NavLink>
+      </li>
+    );
+  });
   return (
     <div>
+      <h2>View Archived Stories</h2>
+      <ul>{feedsMap}</ul>
       Welcome to my RSS reader. RSS stands for really simple syndication. This
       is a format offered by most publications that allows you to grab stories
       from that publication's website without having to go to the website of
