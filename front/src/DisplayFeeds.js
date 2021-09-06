@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-
+import Feed from "./Feed";
 import { callApi } from "./utils/fetch";
-import Feeds from "./Feeds";
+
 import { UserContext } from "./UserContext";
 const DisplayFeeds = () => {
   useEffect(() => {
@@ -28,11 +28,25 @@ const DisplayFeeds = () => {
     await callApi(`/api/feeds/${id}/${user.dbID}`, `delete`);
     setTitles((feeds) => feeds.filter((f) => f.id !== id));
   };
+
+  const feeds = titles.map((item) => {
+    const { name, id, isaudio } = item;
+    return (
+      <Feed
+        key={id}
+        name={name}
+        id={id}
+        isaudio={isaudio}
+        onDelete={deleteFeed}
+      />
+    );
+  });
+
   return (
     <div>
       <h1>View Stories</h1>
 
-      <Feeds titles={titles} onDelete={deleteFeed} />
+      {feeds}
     </div>
   );
 };
