@@ -1,14 +1,27 @@
-import React from "react";
+import * as React from "react";
+import AddFeed from "./AddFee";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Dialog } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 import LoginButton from "./LogInButton";
 import LogoutButton from "./LogOut";
 import { NavLink } from "react-router-dom";
-const Menu = () => {
+import AddPodcast from "./AddPodcast";
+
+const Menu = ({ onAdd }) => {
   const { isLoading, isAuthenticated } = useAuth0();
+  const [addFeed, setAddFeed] = React.useState(false);
+  const [addPodcast, setAddPodcast] = React.useState(false);
+  const onClosePodcast = () => {
+    setAddPodcast(false);
+  };
+  const onClose = () => {
+    setAddFeed(false);
+  };
   return (
     <div>
       {!isLoading && (
-        <ul>
+        <ul id="mainmenu">
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
@@ -19,13 +32,25 @@ const Menu = () => {
           )}
           {isAuthenticated && (
             <li>
-              <NavLink to="/addfeed">Add Feed</NavLink>
+              <button
+                onClick={(e) => {
+                  setAddFeed(true);
+                }}
+              >
+                add Feed
+              </button>
             </li>
           )}
 
           {isAuthenticated && (
             <li>
-              <NavLink to="/addpodcast">Add Podcast</NavLink>
+              <button
+                onClick={(e) => {
+                  setAddPodcast(true);
+                }}
+              >
+                add Podcast
+              </button>
             </li>
           )}
           {!isAuthenticated && (
@@ -41,6 +66,13 @@ const Menu = () => {
           )}
         </ul>
       )}
+
+      <Dialog isOpen={addFeed}>
+        <AddFeed onClose={onClose} onAdd={onAdd} />
+      </Dialog>
+      <Dialog isOpen={addPodcast}>
+        <AddPodcast onAdd={onAdd} onClose={onClosePodcast} />
+      </Dialog>
     </div>
   );
 };

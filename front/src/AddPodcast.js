@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { callApi } from "./utils/fetch";
-const AddPodcast = () => {
+const AddPodcast = ({ onAdd, onClose }) => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const { user } = useContext(UserContext);
@@ -14,10 +14,12 @@ const AddPodcast = () => {
     setResults(data.results);
   };
   const subscribe = async (url, name) => {
+    if (!user?.dbID) return;
     const data = { name, url };
     data.isAudio = true;
     const res = await callApi(`api/feeds/${user.dbID}`, "post", data);
-    console.log(res);
+    onAdd(res.feed);
+    onClose();
   };
   const lis = results.map((item) => {
     const { collectionId, trackName, feedUrl } = item;

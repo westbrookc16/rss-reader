@@ -1,4 +1,5 @@
 import React from "react";
+import { UserData } from "./UserContext";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -13,7 +14,9 @@ ReactDOM.render(
         clientId="Xr72wW2ifM0PCpAAcTQ4MHt8htI9FkES"
         redirectUri={window.location.origin}
       >
-        <App />
+        <UserData>
+          <App />
+        </UserData>
       </Auth0Provider>
     </LiveAnnouncer>
   </React.StrictMode>,

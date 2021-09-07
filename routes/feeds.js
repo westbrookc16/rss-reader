@@ -49,6 +49,7 @@ router.post("/:userID", async (req, res) => {
       feedID = selectQuery.rows[0].id;
     }
     //select from subscriptions to make sure there are no duplicates
+    feed.id = feedID;
     const selectSubscription = await client.query(
       "select * from subscriptions where feedID=$1 and userID=$2",
       [feedID, userID]

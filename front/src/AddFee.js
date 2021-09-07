@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { callApi } from "./utils/fetch";
 import { LiveMessage } from "react-aria-live";
 import { UserContext } from "./UserContext";
-const AddFeed = () => {
+const AddFeed = ({ onClose, onAdd }) => {
   useEffect(() => {
     document.title = `add Feed`;
   }, []);
@@ -19,7 +19,9 @@ const AddFeed = () => {
       isAudio: false,
     });
     if (res.feed.name) {
-      alert(`${res.feed.name} was added successfully.`);
+      //alert(`${res.feed.name} was added successfully.`);
+      onAdd(res.feed);
+      onClose();
     } else {
       alert("an error occurred, please try again.");
     }
@@ -49,15 +51,22 @@ const AddFeed = () => {
   }, [url]);
   return (
     <div>
+      <h1>add Feed</h1>
       <label htmlFor="feed">Feed Url</label>
       <input type="text" id="feed" value={url} onChange={onChange} name="url" />
       <br />
-
-      <button onClick={onClick}>Add</button>
+      <button onClick={onClick}>Add</button> &nbsp;
+      <button
+        onClick={(e) => {
+          onClose();
+        }}
+      >
+        Cancel
+      </button>
       <div>
-        name:{name}
+        name: {name}
         <br />
-        Description:{description}
+        Description: {description}
       </div>
       <LiveMessage message={name} aria-live="polite" />
     </div>
