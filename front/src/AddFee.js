@@ -14,7 +14,10 @@ const AddFeed = () => {
     setUrl(e.target.value);
   };
   const onClick = async (e) => {
-    const res = await callApi(`/api/feeds/${user.dbID}`, "post", { url });
+    const res = await callApi(`/api/feeds/${user.dbID}`, "post", {
+      url,
+      isAudio: false,
+    });
     if (res.feed.name) {
       alert(`${res.feed.name} was added successfully.`);
     } else {

@@ -12,7 +12,7 @@ router.post("/:userID", async (req, res) => {
   const rssParser = new RssParser();
   try {
     if (feed.isAudio === false) {
-      const rssRes = await parser.parseURL(feed.url);
+      const rssRes = await rssParser.parseURL(feed.url);
       feed.name = rssRes.title;
       feed.description = rssRes.description;
     } else {
@@ -66,6 +66,7 @@ router.post("/:userID", async (req, res) => {
     );
     if (itemsSelect.rowCount === 0) {
       if (feed.isAudio === false) {
+        const rssRes = await rssParser.parseURL(feed.url);
         for (let i = rssRes.items.length - 1; i >= 0; i--) {
           const item = rssRes.items[i];
           const { title, link, content } = item;
