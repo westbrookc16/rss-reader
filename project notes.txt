@@ -1,0 +1,2 @@
+remove app header
+if colon between label and content smooshed up adding a space 

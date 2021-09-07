@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import Menu from "./Menu";
 import { UserData } from "./UserContext";
 import AllStories from "./AllStories";
@@ -14,9 +13,6 @@ function App() {
   return (
     <UserData>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
         <Router>
           <nav>
             <Menu />

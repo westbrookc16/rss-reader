@@ -11,6 +11,7 @@ const Home = () => {
   const [feeds, setFeeds] = useState([]);
   useEffect(() => {
     async function fetchData() {
+      if (!user.dbID) return;
       const feeds = await callApi(`/api/feeds/${user.dbID}`);
       setFeeds(feeds);
     }
