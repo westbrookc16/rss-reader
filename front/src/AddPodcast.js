@@ -49,7 +49,15 @@ const AddPodcast = ({ onAdd, onClose }) => {
           setSearch(e.target.value);
         }}
       />
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={handleSearch}>Search</button>&nbsp;
+      <button
+        id="btnCancel"
+        onClick={(e) => {
+          onClose();
+        }}
+      >
+        Cancel
+      </button>
       <ul>{lis}</ul>
     </div>
   );
